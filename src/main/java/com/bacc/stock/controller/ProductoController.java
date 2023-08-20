@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bacc.stock.model.Producto;
 import com.bacc.stock.service.Impl.ProductoServiceImpl;
 import com.bacc.stock.service.dto.CantidadProductosDto;
+import com.bacc.stock.service.dto.ProductoDto;
 
 
 @RestController
@@ -28,5 +29,15 @@ public class ProductoController {
     @GetMapping(value="/cantidad-productos", produces = MediaType.APPLICATION_JSON_VALUE)
     public CantidadProductosDto geCantidadProductos() throws IOException {
         return productoService.getCantidadProductos();
+    }
+
+    @GetMapping(value="/mayor-stock", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<ProductoDto> getProductosMayorStock() throws IOException {
+        return productoService.getProductosMayorStock();
+    }
+
+    @GetMapping(value="/diferente-UNIDAD", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<ProductoDto> getProductoDiferenteA() throws IOException {
+        return productoService.getProductosDiferenteA();
     }
 }

@@ -1,9 +1,12 @@
 package com.bacc.stock.service.Impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.client.support.BasicAuthenticationInterceptor;
@@ -14,6 +17,7 @@ import com.bacc.stock.model.ApiResponse;
 import com.bacc.stock.model.Producto;
 import com.bacc.stock.service.ProductoService;
 import com.bacc.stock.service.dto.CantidadProductosDto;
+import com.bacc.stock.service.dto.ProductoDto;
 
 @Service
 public class ProductoServiceImpl implements ProductoService {
@@ -46,11 +50,11 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     public CantidadProductosDto getCantidadProductos() throws IOException {
+        
         List<Producto> registros = consumeApiWithBasicAuth();
         Integer totalRegistros = registros.size();
 
         Set<String> productosUnicos = new HashSet<>();
-        
         for (Producto producto : registros) {
             productosUnicos.add(producto.getProduct());
         }
@@ -62,5 +66,53 @@ public class ProductoServiceImpl implements ProductoService {
         return cantidadProductos;
         
 
+    }
+
+    @Override
+    public List<ProductoDto> getProductosMayorStock() throws IOException {
+        Integer limite = 10;
+
+        List<Producto> registros = consumeApiWithBasicAuth();
+
+        List<ProductoDto> registrosOrdenados = new ArrayList<>();
+
+        for(Producto registro: registros){
+            ProductoDto productoDto = new ProductoDto();
+            productoDto.setCantidad(Integer.valueOf(registro.getCantidad()));
+            productoDto.setNombreUnidad(registro.getNombreUnidad());
+            productoDto.setProduct(registro.getProduct());
+            productoDto.setProductIdentifier(registro.getProductIdentifier());
+            registrosOrdenados.add(productoDto);
+        }
+
+        List<ProductoDto> mayoresRegistros = registrosOrdenados.stream()
+            .sorted(Comparator.comparing(ProductoDto::getCantidad, Comparator.reverseOrder()))
+            .limit(limite)
+            .collect(Collectors.toList());
+        
+        return mayoresRegistros; 
+    }
+
+    @Override
+    public List<ProductoDto> getProductosDiferenteA() throws IOException {
+        String nombreComparar = "UNIDAD";
+        List<Producto> registros = consumeApiWithBasicAuth();
+
+        List<Producto> registrosFiltrados = registros.stream()
+                .filter(u->!u.getNombreUnidad().equals(nombreComparar))
+                .toList();
+
+        List<ProductoDto> registrosOrdenados = new ArrayList<>();
+
+        for(Producto registro: registrosFiltrados){
+            ProductoDto productoDto = new ProductoDto();
+            productoDto.setCantidad(Integer.valueOf(registro.getCantidad()));
+            productoDto.setNombreUnidad(registro.getNombreUnidad());
+            productoDto.setProduct(registro.getProduct());
+            productoDto.setProductIdentifier(registro.getProductIdentifier());
+            registrosOrdenados.add(productoDto);
+        }
+        
+        return registrosOrdenados;
     }
 }
