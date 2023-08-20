@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.client.support.BasicAuthenticationInterceptor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -22,11 +21,8 @@ import com.bacc.stock.service.dto.ProductoDto;
 
 @Service
 public class ProductoServiceImpl implements ProductoService {
-     //@Value("Openbravo")
-    private String username="Openbravo";
-
-    //@Value("1234")
-    private String password="1234";
+    // private String username="Openbravo";
+    // private String password="1234";
 
     public List<Producto>  consumeApiWithBasicAuth(Credenciales credenciales) throws IOException{
 
