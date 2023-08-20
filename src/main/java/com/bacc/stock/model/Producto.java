@@ -12,11 +12,16 @@ import lombok.NoArgsConstructor;
 public class Producto {
     @JsonProperty("id")
     private String id;
-    // @JsonProperty("product$_identifier")
-    // private String product$_identifier;
-    @JsonProperty("_identifier")
-    private String identifier;
+
+    @JsonProperty("product")
+    private String product;
 
     @JsonProperty("product$_identifier")
     private String productIdentifier;
+
+    @JsonProperty("uOM$_identifier")
+    private String nombreUnidad;
+
+    @JsonProperty("quantityOnHand")
+    private String cantidad;
 }
