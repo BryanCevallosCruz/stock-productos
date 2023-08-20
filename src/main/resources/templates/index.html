@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Stock</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+    <!-- <header>
+        <h1>Pagina web para conocer el stock de productos</h1>
+    </header>
+    
+    <main>
+        <section>
+            <h2>Sección Principal</h2>
+            <p>Bienvenido a mi página web.</p>
+        </section>
+    </main>
+    
+    <footer>
+        <p>Bryan Cevallos</p>
+    </footer> -->
+    <div class="container">
+        <h2 class="text-center">Pagina web para conocer el stock de productos</h2>
+        <div class="container mt-4">
+            <div>Cantidad total de registros: 
+                <span th:text="${totalRegistros}" th:class="font-weight-bold">Total</span>
+            </div>
+            <div>Cantidad total de productos diferentes: 
+                <span th:text="${totalProductosDiferentes}" th:class="font-weight-bold">Total diferentes</span>
+            </div>
+        </div>
+
+        <h4 class="text-center mt-4">Lista de los 10 productos con mayor stock ordenados de mayor a menor</h4>
+        <div class="container mt-2 d-flex justify-content-center">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID Producto</th>
+                        <th>Producto</th>
+                        <th>Unidad</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="productosMayorStock:${productosMayorStock}">
+                        <td th:text="${productosMayorStock.product}"></td>
+                        <td th:text="${productosMayorStock.productIdentifier}"></td>
+                        <td th:text="${productosMayorStock.nombreUnidad}"></td>
+                        <td th:text="${productosMayorStock.cantidad}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h4 class="text-center mt-4">Lista de productos cuya unidad de medida es diferente a "UNIDAD"</h4>
+        <div class="container mt-2 d-flex justify-content-center">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID Producto</th>
+                        <th>Producto</th>
+                        <th>Unidad</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="productosDiferenteA:${productosDiferenteA}">
+                        <td th:text="${productosDiferenteA.product}"></td>
+                        <td th:text="${productosDiferenteA.productIdentifier}"></td>
+                        <td th:text="${productosDiferenteA.nombreUnidad}"></td>
+                        <td th:text="${productosDiferenteA.cantidad}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+
+</body>
+</html>
