@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.bacc.stock.model.ApiResponse;
+import com.bacc.stock.model.Credenciales;
 import com.bacc.stock.model.Producto;
 import com.bacc.stock.service.ProductoService;
 import com.bacc.stock.service.dto.CantidadProductosDto;
@@ -21,18 +22,19 @@ import com.bacc.stock.service.dto.ProductoDto;
 
 @Service
 public class ProductoServiceImpl implements ProductoService {
-     @Value("Openbravo")
-    private String username;
+     //@Value("Openbravo")
+    private String username="Openbravo";
 
-    @Value("1234")
-    private String password;
+    //@Value("1234")
+    private String password="1234";
 
-    public List<Producto>  consumeApiWithBasicAuth() throws IOException{
+    public List<Producto>  consumeApiWithBasicAuth(Credenciales credenciales) throws IOException{
 
         RestTemplate restTemplate = new RestTemplate();
 
         // Configurar autenticación básica
-        restTemplate.getInterceptors().add(new BasicAuthenticationInterceptor(username, password));
+        restTemplate.getInterceptors().add(new BasicAuthenticationInterceptor(credenciales.getUsername(), credenciales.getPassword()));
+        // restTemplate.getInterceptors().add(new BasicAuthenticationInterceptor(username, password));
 
         String apiUrl = "https://obpreprod.sidesoftcorp.com/happypreprod//org.openbravo.service.json.jsonrest/MaterialMgmtStorageDetail";
 
@@ -44,14 +46,14 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
-    public List<Producto> getAllProducts() throws IOException {
-       return consumeApiWithBasicAuth();
+    public List<Producto> getAllProducts(Credenciales credenciales) throws IOException {
+       return consumeApiWithBasicAuth(credenciales);
     }
 
     @Override
-    public CantidadProductosDto getCantidadProductos() throws IOException {
+    public CantidadProductosDto getCantidadProductos(Credenciales credenciales) throws IOException {
         
-        List<Producto> registros = consumeApiWithBasicAuth();
+        List<Producto> registros = consumeApiWithBasicAuth(credenciales);
         Integer totalRegistros = registros.size();
 
         Set<String> productosUnicos = new HashSet<>();
@@ -69,10 +71,10 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
-    public List<ProductoDto> getProductosMayorStock() throws IOException {
+    public List<ProductoDto> getProductosMayorStock(Credenciales credenciales) throws IOException {
         Integer limite = 10;
 
-        List<Producto> registros = consumeApiWithBasicAuth();
+        List<Producto> registros = consumeApiWithBasicAuth(credenciales);
 
         List<ProductoDto> registrosOrdenados = new ArrayList<>();
 
@@ -94,9 +96,9 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
-    public List<ProductoDto> getProductosDiferenteA() throws IOException {
+    public List<ProductoDto> getProductosDiferenteA(Credenciales credenciales) throws IOException {
         String nombreComparar = "UNIDAD";
-        List<Producto> registros = consumeApiWithBasicAuth();
+        List<Producto> registros = consumeApiWithBasicAuth(credenciales);
 
         List<Producto> registrosFiltrados = registros.stream()
                 .filter(u->!u.getNombreUnidad().equals(nombreComparar))
